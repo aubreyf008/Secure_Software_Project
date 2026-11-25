@@ -5,8 +5,13 @@ __pycache__/
 *.pyc
 .pytest_cache/
 
-# PyInstaller build folders (the binary itself goes in a GitHub release or dist/ when you decide)
+# PyInstaller build output (the binary is too big for git; attach it to a GitHub Release)
 build/
+dist/
+*.spec
+
+# CI writes this when it filters requirements.txt
+ci-requirements.txt
 
 # The Dockerfile dataset must NOT be uploaded (assignment rule)
 dockerfiles/

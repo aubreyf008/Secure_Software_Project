@@ -1,0 +1,41 @@
+name: Run tests
+
+# Git can't trigger Actions on a local `git pull`, so tests run whenever code
+# reaches GitHub: every push, every pull request, and on demand.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # Tests use a fake LLM, so torch/transformers (several GB) are skipped here.
+      - name: Install Python dependencies
+        run: |
+          grep -vE '^(torch|transformers|accelerate|pyinstaller)==' requirements.txt > ci-requirements.txt
+          pip install -r ci-requirements.txt
+
+      - name: Install Hadolint
+        run: |
+          sudo wget -q -O /usr/local/bin/hadolint \
+            https://github.com/hadolint/hadolint/releases/download/v2.15.1/hadolint-Linux-x86_64
+          sudo chmod +x /usr/local/bin/hadolint
+          hadolint --version
+
+      - name: Run all test cases
+        run: python -m pytest -v 2>&1 | tee test-log.txt; exit ${PIPESTATUS[0]}
+
+      - name: Save test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-log
+          path: test-log.txt
