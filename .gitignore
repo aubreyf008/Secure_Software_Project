@@ -1,0 +1,19 @@
+# Python virtual environment and caches
+.venv/
+comp5700-venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# PyInstaller build folders (the binary itself goes in a GitHub release or dist/ when you decide)
+build/
+
+# The Dockerfile dataset must NOT be uploaded (assignment rule)
+dockerfiles/
+dockerfiles.zip
+
+# Hugging Face login token, never commit
+.env
+
+# macOS
+.DS_Store

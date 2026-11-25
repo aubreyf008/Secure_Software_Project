@@ -1,0 +1,2 @@
+# TODO: once your code works, run `pip freeze` inside your venv and keep
+# only the libraries you actually use, with their versions (assignment rule).
