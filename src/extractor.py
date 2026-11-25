@@ -107,6 +107,9 @@ def extract_requirements(document_text):
     for match in pattern.finditer(document_text):
         req_id = match.group(1)
         title = " ".join(match.group(2).split())       # join wrapped lines
+        # A word split at a hyphen across lines ("shim-\nrunc") must not gain
+        # a space, or the same title looks different between PDF versions.
+        title = re.sub(r"(\w)- (\w)", r"\1-\2", title)
         title = re.sub(r"\s*\.{3,}.*", "", title)      # drop TOC dot leaders
         requirements.setdefault(req_id, title.rstrip(" ."))
     return requirements
